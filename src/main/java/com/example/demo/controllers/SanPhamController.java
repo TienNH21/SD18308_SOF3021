@@ -1,39 +1,49 @@
 package com.example.demo.controllers;
 
+import com.example.demo.entities.SanPham;
+import com.example.demo.repositories.assignment1.SanPhamRepository;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
-public class SanPhamController {
+import java.util.List;
 
-//    @RequestMapping("san-pham/create")
-    @GetMapping("san-pham/create")
+@Controller
+@RequestMapping("san-pham")
+public class SanPhamController {
+    private SanPhamRepository spRepo;
+
+    public SanPhamController()
+    {
+        this.spRepo = new SanPhamRepository();
+    }
+
+
+    @GetMapping("index")
+    public String index(Model model)
+    {
+        List<SanPham> ds = this.spRepo.findAll();
+        model.addAttribute("data", ds);
+        return "san_pham/index";
+    }
+
+    @GetMapping("create")
     public String create()
     {
         return "san_pham/create";
     }
 
-//    @RequestMapping(
-//        value = "san-pham/store",
-//        method = RequestMethod.POST
-//    )
-    @PostMapping("san-pham/store")
-    public String store(
-        @RequestParam("ma") String maSP,
-        @RequestParam("ten") String tenSP,
-        @RequestParam("trangThai") String trangThaiSP
-    ) {
-        System.out.println("SanPhamController@store");
-        System.out.println(maSP);
-        System.out.println(tenSP);
-        System.out.println(trangThaiSP);
-        System.out.println("-----------------");
+    @PostMapping("store")
+    public String store(SanPham sanPham) {
+        this.spRepo.create(sanPham);
         return "san_pham/create";
     }
 
-    public String index()
+    // query string
+    @GetMapping("delete/{id}")
+    public String delete(@PathVariable("id") Integer id)
     {
-        // Load 3 phần tử lên table (fix cứng dữ liệu)
-        return "san_pham/index";
+        this.spRepo.deleteById(id);
+        return "san_pham/create";
     }
 }
