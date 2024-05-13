@@ -22,6 +22,7 @@ public class SanPhamRepository {
 
     public void create(SanPham sp)
     {
+        sp.setId( this.ds.size() + 1 );
         this.ds.add(sp);
     }
 
@@ -31,6 +32,29 @@ public class SanPhamRepository {
             SanPham sp = this.ds.get(i);
             if (sp.getId() == id) {
                 this.ds.remove(i);
+            }
+        }
+    }
+
+    public SanPham findById(int id)
+    {
+        SanPham ketQua = null;
+        for (int i = 0; i < this.ds.size(); i++) {
+            SanPham sp = this.ds.get(i);
+            if (sp.getId() == id) {
+                ketQua = sp;
+            }
+        }
+
+        return ketQua;
+    }
+
+    public void update(SanPham sanPham)
+    {
+        for (int i = 0; i < this.ds.size(); i++) {
+            SanPham sp = this.ds.get(i);
+            if (sp.getId() == sanPham.getId()) {
+                this.ds.set(i, sanPham);
             }
         }
     }
