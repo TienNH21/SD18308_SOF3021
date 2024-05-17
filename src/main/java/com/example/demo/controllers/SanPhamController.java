@@ -2,11 +2,18 @@ package com.example.demo.controllers;
 
 import com.example.demo.entities.SanPham;
 import com.example.demo.repositories.assignment1.SanPhamRepository;
+import jakarta.validation.Valid;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("san-pham")
@@ -28,13 +35,25 @@ public class SanPhamController {
     }
 
     @GetMapping("create")
-    public String create()
+    public String create(@ModelAttribute("data") SanPham sp)
     {
         return "san_pham/create";
     }
 
     @PostMapping("store")
-    public String store(SanPham sanPham) {
+    public String store(Model model,
+        @Valid SanPham sanPham, BindingResult validate) {
+        if (validate.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError e : validate.getFieldErrors()) {
+                errors.put(e.getField(), e.getDefaultMessage());
+            }
+
+            model.addAttribute("data", sanPham);
+            model.addAttribute("errors", errors);
+            return "san_pham/create";
+        }
+
         this.spRepo.create(sanPham);
         return "redirect:/san-pham/index";
     }
