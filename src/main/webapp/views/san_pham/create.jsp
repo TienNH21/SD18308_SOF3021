@@ -18,7 +18,7 @@
         <label>Mã</label>
         <input type="text" name="ma" value="${ data.ma }" />
         <c:if test="${ not empty errors['ma'] }">
-            <small style="color: red">${ errors['ma'] }</small>
+            <small style="color: #ff0000">${ errors['ma'] }</small>
         </c:if>
     </div>
     <div>
