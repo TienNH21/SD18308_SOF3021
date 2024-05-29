@@ -24,7 +24,7 @@
     </tr>
     </thead>
     <tbody>
-    <c:forEach items="${ data }" var="sp">
+    <c:forEach items="${ data.content }" var="sp">
     <tr>
         <td>${ sp.id }</td>
         <td>${ sp.ma }</td>

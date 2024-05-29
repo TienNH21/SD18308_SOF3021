@@ -5,6 +5,9 @@ import com.example.demo.repositories.assignment2.SanPhamRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,10 +26,14 @@ public class SanPhamController {
     private SanPhamRepository spRepo;
 
     @GetMapping("index")
-    public String index(Model model)
-    {
-        List<SanPham> ds = this.spRepo.findAll();
-        model.addAttribute("data", ds);
+    public String index(
+        @RequestParam(name="limit", defaultValue="10") int pageSize,
+        @RequestParam(name="page", defaultValue="1") int pageNo,
+        Model model
+    ) {
+        Pageable p = PageRequest.of(pageNo, pageSize);
+        Page<SanPham> page = this.spRepo.findAll(p);
+        model.addAttribute("data", page);
         return "san_pham/index";
     }
 
@@ -55,16 +62,16 @@ public class SanPhamController {
     }
 
     @GetMapping("delete/{id}")
-    public String delete(@PathVariable("id") Integer id)
+    public String delete(@PathVariable("id") SanPham sp)
     {
-        this.spRepo.deleteById(id);
+        this.spRepo.delete(sp);
+//        this.spRepo.deleteById(id);
         return "redirect:/san-pham/index";
     }
 
     @GetMapping("edit/{id}")
-    public String edit(@PathVariable("id") Integer id, Model model)
+    public String edit(@PathVariable("id") SanPham sp, Model model)
     {
-        SanPham sp = this.spRepo.findById(id).get();
         model.addAttribute("data", sp);
         return "san_pham/edit";
     }
