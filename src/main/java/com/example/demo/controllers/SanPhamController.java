@@ -1,8 +1,9 @@
 package com.example.demo.controllers;
 
 import com.example.demo.entities.SanPham;
-import com.example.demo.repositories.assignment1.SanPhamRepository;
+import com.example.demo.repositories.assignment2.SanPhamRepository;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,13 +19,8 @@ import java.util.Map;
 @Controller
 @RequestMapping("san-pham")
 public class SanPhamController {
+    @Autowired
     private SanPhamRepository spRepo;
-
-    public SanPhamController()
-    {
-        this.spRepo = new SanPhamRepository();
-    }
-
 
     @GetMapping("index")
     public String index(Model model)
@@ -54,7 +50,7 @@ public class SanPhamController {
             return "san_pham/create";
         }
 
-        this.spRepo.create(sanPham);
+        this.spRepo.save(sanPham);
         return "redirect:/san-pham/index";
     }
 
@@ -68,14 +64,14 @@ public class SanPhamController {
     @GetMapping("edit/{id}")
     public String edit(@PathVariable("id") Integer id, Model model)
     {
-        SanPham sp = this.spRepo.findById(id);
+        SanPham sp = this.spRepo.findById(id).get();
         model.addAttribute("data", sp);
         return "san_pham/edit";
     }
 
     @PostMapping("update/{id}")
     public String update(SanPham sanPham) {
-        this.spRepo.update(sanPham);
+        this.spRepo.save(sanPham);
         return "redirect:/san-pham/index";
     }
 }
