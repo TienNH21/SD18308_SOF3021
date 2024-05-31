@@ -17,7 +17,8 @@ public class SpctController {
     @GetMapping("index")
     public String index(Model model)
     {
-        model.addAttribute("data", spctRepo.findAllWithPropName());
+        model.addAttribute("data", spctRepo.findAll());
+//        model.addAttribute("data", spctRepo.findAllWithPropName());
         return "spct/index";
     }
 }

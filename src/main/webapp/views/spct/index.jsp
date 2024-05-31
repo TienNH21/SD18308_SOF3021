@@ -33,7 +33,7 @@
         <td>${ spct.id }</td>
         <td>${ spct.idMS }</td>
         <td>${ spct.idKT }</td>
-        <td>${ spct.tenSP }</td>
+        <td>${ spct.sp.ten }</td>
         <td>${ spct.maSPCT }</td>
         <td>${ spct.soLuong }</td>
         <td>${ spct.donGia }</td>
